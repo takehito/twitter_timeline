@@ -30,7 +30,10 @@ func main() {
 	httpClient := config.Client(oauth1.NoContext, token)
 
 	path := fmt.Sprintf("https://api.twitter.com/1.1/statuses/home_timeline.json?count=%d", *count)
-	resp, _ := httpClient.Get(path)
+	resp, err := httpClient.Get(path)
+	if err != nil {
+		log.Fatal(err)
+	}
 	defer resp.Body.Close()
 
 	var tweets tweets

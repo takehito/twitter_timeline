@@ -16,17 +16,32 @@ type UserInfo struct {
 }
 
 type Tweet struct {
-	User UserInfo `json:"user"`
-	Text string   `json:"text"`
-	When string   `json:"created_at"`
+	User     UserInfo `json:"user"`
+	Text     string   `json:"text"`
+	When     string   `json:"created_at"`
+	RtCount  int      `json:"retweet_count"`
+	FavCount int      `json:"favorite_count"`
 }
 
 type tweets []Tweet
+
+const (
+	twFmt = `
+%s: %s
+%s
+retweet: %d     favorite: %d
+`
+)
 
 func errCheck(err error) {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func coloringStr(s string) string {
+	// 黄色のみ
+	return fmt.Sprintf("\x1b[33m%s\x1b[0m", s)
 }
 
 func main() {
@@ -62,8 +77,7 @@ func main() {
 		default:
 			fmtBefore = fmt.Sprintf("%d秒前", int(before.Seconds()))
 		}
-
-		fmt.Printf("\x1b[33m%s\x1b[0m: %s\n", tweet.User.Name, fmtBefore)
-		fmt.Printf("%s\n\n", tweet.Text)
+		yellowName := coloringStr(tweet.User.Name)
+		fmt.Printf(twFmt, yellowName, fmtBefore, tweet.Text, tweet.RtCount, tweet.FavCount)
 	}
 }

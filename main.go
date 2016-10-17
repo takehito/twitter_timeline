@@ -43,6 +43,6 @@ func main() {
 	}
 
 	for _, tweet := range tweets {
-		fmt.Printf("%s: %s\n\n", tweet.User.Name, tweet.Text)
+		fmt.Printf("\x1b[33m%s\x1b[0m: %s\n\n", tweet.User.Name, tweet.Text)
 	}
 }
